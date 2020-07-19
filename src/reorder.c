@@ -39,7 +39,7 @@ SEXP reorder(SEXP x, SEXP order)
   int i=0;
   while (i<nrow && idx[i] == i+1) ++i;
   const int start=i;
-  if (start==nrow) { UNPROTECT(nprotect); return R_NilValue; }  // input is 1:n, nothing to do
+  if (start==nrow) { UNPROTECT(nprotect); return ScalarLogical(FALSE); }  // input is 1:n, nothing to do
   i = nrow-1;
   while (idx[i] == i+1) --i;
   const int end=i, nmid=end-start+1;
@@ -95,7 +95,7 @@ SEXP reorder(SEXP x, SEXP order)
     // This shuffle operation does not inc or dec named/refcnt, or anything similar in R: past, present or future.
   }
   UNPROTECT(nprotect);
-  return R_NilValue;
+  return ScalarLogical(TRUE);
 }
 
 SEXP setcolorder(SEXP x, SEXP o)

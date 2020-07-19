@@ -101,10 +101,12 @@ setkeyv = function(x, cols, verbose=getOption("datatable.verbose"), physical=TRU
     setattr(attr(x, "index", exact=TRUE), paste0("__", cols, collapse=""), o)
     return(invisible(x))
   }
-  setattr(x,"index",NULL)   # TO DO: reorder existing indexes likely faster than rebuilding again. Allow optionally. Simpler for now to clear.
   if (length(o)) {
     if (verbose) { last.started.at = proc.time() }
-    .Call(Creorder,x,o)
+    if (.Call(Creorder,x,o)) {
+      # TO DO: reorder existing indexes likely faster than rebuilding again. Allow optionally. Simpler for now to clear.
+      setattr(x,"index",NULL)
+    }
     if (verbose) { cat("reorder took", timetaken(last.started.at), "\n"); flush.console() }
   } else {
     if (verbose) cat("x is already ordered by these columns, no need to call reorder\n")
